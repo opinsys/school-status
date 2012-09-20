@@ -42,10 +42,11 @@ app.configure ->
   app.set "view engine", "html"
 
 
+app.get "/", (req, res) ->
+  res.send "And your organisation is?"
 
 app.get "/:org/:schoolId/wlan*", (req, res) ->
   res.render "wlan", appLoad: appLoad
-
 
 app.get "/:org", (req, res) ->
   res.render "orgindex", appLoad: appLoad
