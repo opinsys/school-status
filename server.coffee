@@ -11,7 +11,6 @@ engines = require "consolidate"
 _  = require "underscore"
 
 oui = require "./lib/oui"
-console.info oui
 
 
 config = require "./config.json"
@@ -65,17 +64,17 @@ app.get "/schools/:org", (req, res) ->
   # might want to optimize this with distinct&find combo
   coll.find({
     school_id: { $exists: true }
-    }, {
-      school_id: 1
-      school_name: 1
-    }).forEach (doc) ->
+  }, {
+    school_id: 1
+    school_name: 1
+  }).forEach (doc) ->
 
-      if doc.school_id
-        schools[doc.school_id] = doc.school_name
+    if doc.school_id
+      schools[doc.school_id] = doc.school_name
 
-    , (err) ->
-      return res.send err, 501 if err
-      res.json schools
+  , (err) ->
+    return res.send err, 501 if err
+    res.json schools
 
 
 # GET log history
