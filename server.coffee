@@ -3,6 +3,7 @@
 fs = require "fs"
 domain = require "domain"
 http = require "http"
+
 express = require "express"
 io = require "socket.io"
 stylus = require "stylus"
@@ -10,19 +11,27 @@ Mongolian = require "mongolian"
 engines = require "consolidate"
 _  = require "underscore"
 
-oui = require "./lib/oui"
-
-
 config = require "./config.json"
-
 Puavo = require "./lib/puavo"
 
 mongo = new Mongolian
-puavo = new Puavo config
 app = express()
 httpServer = http.createServer(app)
 db = mongo.db "ltsplog"
 sio = io.listen httpServer
+puavo = new Puavo config
+
+# Object of log handlers for different types of events. Can be used to
+# manipulate log data or to add hooks.
+# TODO: support multiple handlers per event type
+logHandlers =
+  default: (data, meta, cb) -> cb null, data
+  get: (type) -> this[type] or this.default
+
+  wlan: require("./loghandlers/wlan")(puavo)
+  # desktop: require("./loghandlers/desktop")(options...)
+  # laptop: require("./loghandlers/laptop")(options...)
+
 
 appLoad = "start"
 app.configure "production", ->
@@ -61,7 +70,8 @@ app.get "/schools/:org", (req, res) ->
   schools = {}
 
   # XXX: This will go through almost all entries in given organisation. We
-  # might want to optimize this with distinct&find combo
+  # might want to optimize this with distinct&find combo if would become too
+  # slow
   coll.find({
     school_id: { $exists: true }
   }, {
@@ -102,54 +112,13 @@ app.get "/log/:org/:schoolId/:type", (req, res) ->
       console.info "Failed to fetch #{ org }/#{ collName }"
       res.send err, 501
     else
-      console.info "Fetch from #{ org }/#{ collName }"
       res.json arr
 
 
-# Custom log type handlers based on the type attribute
-logHandlers =
-  wlan: (org, data) ->
-
-    if data.mac
-      data.client_hostname = puavo.lookupDeviceName(org, data.mac)
-      data.client_manufacturer = oui.lookup data.mac
-
-    if data.hostname
-      if data.school_id = puavo.lookupSchoolId(org, data.hostname)
-        data.school_name = puavo.lookupSchoolName(org, data.school_id)
-      else
-        console.error "Cannot find school id for #{ org }/#{ data.hostname }"
 
 
 # Logs any given POST data to given MongoDB collection.
 app.post "/log", (req, res) ->
-
-  # Just respond immediately to sender. We will just log database errors.
-  res.json message: "thanks"
-
-  data = req.body
-  fullOrg = data.relay_puavo_domain
-
-  if match = data.relay_puavo_domain.match(/^([^\.]+)/)
-    org = match[1]
-  else
-    console.error "Failed to parse organisation key from '#{ data.relay_puavo_domain }'"
-    return
-
-  # TODO: remove when fixed!
-  if not data.type or data.type is "unknown"
-    console.info "Unknown type or missing! #{ data.type }"
-    data.type = "wlan"
-
-  logHandlers[data.type](org, data)
-
-  collName = "log:#{ org }:#{ data.type }"
-  coll = db.collection collName
-
-
-
-  console.info "emit #{ collName }"
-  sio.sockets.emit collName, data
 
   d = domain.create()
   d.on "error", (err) ->
@@ -158,9 +127,46 @@ app.post "/log", (req, res) ->
 
   d.run -> process.nextTick ->
 
-    coll.insert data, (err, docs) ->
+    # Just respond immediately to sender. We will just log database errors.
+    res.json message: "thanks"
+
+    data = req.body
+    fullOrg = data.relay_puavo_domain
+
+    if match = data.relay_puavo_domain.match(/^([^\.]+)/)
+      org = match[1]
+    else
+      console.error "Failed to parse organisation key from '#{ data.relay_puavo_domain }'. Ignoring packet."
+      return
+
+    if not data.type or data.type is "unknown"
+      data.type = "unknown"
+      console.error "Unknown type or missing! #{ data.type }"
+
+    collName = "log:#{ org }:#{ data.type }"
+    coll = db.collection collName
+
+    handler = loghandlers.get(data.type)
+
+    meta =
+      org: org
+      db: db
+      coll: coll
+      collName: collName
+
+    handler data, meta, (err, data) ->
       throw err if err
-      console.info "Log saved to #{ org }/#{ collName }"
+
+      # Packet ignored by log handler
+      return if not data
+
+      # Send to browser clients
+      sio.sockets.emit collName, data
+
+      # Save to database
+      coll.insert data, (err, docs) ->
+        throw err if err
+        console.info "Log saved to #{ org }/#{ collName }"
 
 
 
