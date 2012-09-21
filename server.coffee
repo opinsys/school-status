@@ -83,7 +83,7 @@ app.get "/log/:org/:schoolId/:type", (req, res) ->
 
   org = req.params.org
   type = req.params.type
-  schoolId = req.params.schoolId
+  schoolId = parseInt(req.params.schoolId, 10)
   limit = req.query.limit or 10
 
   collName = "log:#{ org }:#{ type }"
