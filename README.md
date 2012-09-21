@@ -20,6 +20,7 @@ Binary speed for the lazy
 
     wget http://nodejs.org/dist/v0.8.9/node-v0.8.9-linux-x64.tar.gz
     tar xzvf node-v0.8.9-linux-x64.tar.gz
+    cd node-v0.8.9-linux-x64/
     cp -r * /usr/local
 
 Install and build production scripts
