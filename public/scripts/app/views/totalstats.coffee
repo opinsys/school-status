@@ -29,6 +29,8 @@ define [
           return "0"
         m.get("relay_timestamp")
 
+      return if not lastJoin
+
       lastJoinSec = (Date.now() / 1000)  - parseInt(lastJoin.get("relay_timestamp"), 10)
       lastJoinSec = Math.round lastJoinSec
 
@@ -56,7 +58,10 @@ define [
 
       # FIXME: will fail with zero events
       firstEntry = @clients.min (m) -> m.get("relay_timestamp")
-      time = moment.unix(firstEntry.get("relay_timestamp"))
+      if firstEntry
+        time = moment.unix(firstEntry.get("relay_timestamp"))
+      else
+        time = moment()
 
       eventCount = @model.get("eventCount")
       url = URI(window.location.href)
