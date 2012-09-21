@@ -44,6 +44,7 @@ app.configure ->
   sio.set('log level', 1)
   app.use express.bodyParser()
   app.use express.static __dirname + "/public"
+  app.use require "./lib/parsebasicauth"
 
   app.engine "html", engines.underscore
   app.set "views", __dirname + "/views"
@@ -120,6 +121,8 @@ app.get "/log/:org/:schoolId/:type", (req, res) ->
 
 # Logs any given POST data to given MongoDB collection.
 app.post "/log", (req, res) ->
+
+  # TODO: validate req.auth
 
   d = domain.create()
   d.on "error", (err) ->
