@@ -90,7 +90,11 @@ app.get "/log/:org/:schoolId/:type", (req, res) ->
   coll = db.collection collName
 
   # Find latest entries
-  coll.find( school_id: schoolId).sort({ relay_timestamp: -1 }).limit(limit).toArray (err, arr) ->
+  coll.find(school_id: schoolId).sort({ relay_timestamp: -1 }).limit(limit).toArray (err, arr) ->
+    if err
+      console.info "Failed to fetch #{ collName }"
+      return res.send err, 501
+
 
     # Send latest event as last
     arr.reverse()
@@ -98,12 +102,8 @@ app.get "/log/:org/:schoolId/:type", (req, res) ->
     for doc in arr
       delete doc._id
 
-    if err
-      console.info "Failed to fetch #{ org }/#{ collName }"
-      res.send err, 501
-    else
-      console.info "Fetch from #{ org }/#{ collName }"
-      res.json arr
+    console.info "Fetch #{ arr.length } items from #{ collName }"
+    res.json arr
 
 
 # Custom log type handlers based on the type attribute
