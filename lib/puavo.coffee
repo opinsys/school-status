@@ -7,11 +7,10 @@ class Puavo extends EventEmitter
     @config = config
 
     @organisations = config.organisations
-    console.log @organisationsorganisationDevicesByMac
     @organisationDevicesByMac = {}
     @organisationSchoolsById = {}
-    @organisationDevicesByHostname = {} 
-  
+    @organisationDevicesByHostname = {}
+
 
   pollStart: ->
     do timeoutLoop = =>
@@ -29,15 +28,13 @@ class Puavo extends EventEmitter
     @started = true
 
   poll: (cb) ->
-    console.log("pollStart")
 
     requestCount = 0
 
     for key, value of @organisations then do (key, value) =>
-      console.log("Organisation: ", key)
-  
+
       auth = "Basic " + new Buffer(value["username"] + ":" + value["password"]).toString("base64");
-  
+
       requestCount += 2
       done = (err) =>
         if err
@@ -48,7 +45,7 @@ class Puavo extends EventEmitter
         if requestCount is 0
           cb()
           done = ->
-  
+
       # Get schools
       request {
         url: value["puavoDomain"] + "/users/schools.json",
@@ -75,7 +72,7 @@ class Puavo extends EventEmitter
         if !error && res.statusCode == 200
           devices = JSON.parse(body)
           @organisationDevicesByMac[key] = {}
-          console.info "Cached #{ devices.length } devices from #{ value["puavoDomain"] }"
+          console.info "Fetched #{ devices.length } devices from #{ value["puavoDomain"] }"
           @organisationDevicesByHostname[key] = {}
           for device in devices
             if device.school_id
@@ -86,9 +83,9 @@ class Puavo extends EventEmitter
               @organisationDevicesByMac[key][ device.mac_address ]["hostname"] = device.hostname
         else
           console.log("Can't connect to puavo server: ", error)
-  
+
         done error
-  
+
   lookupDeviceName: (org, mac) ->
     @organisationDevicesByMac[org]?[mac]?.hostname
 
