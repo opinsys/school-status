@@ -123,7 +123,7 @@ app.post "/log", (req, res) ->
 
   d = domain.create()
   d.on "error", (err) ->
-    console.error "Failed to save log data to #{ org }/#{ collName }"
+    console.error "Failed to save log data"
     console.error err.stack
 
   d.run -> process.nextTick ->
@@ -147,7 +147,7 @@ app.post "/log", (req, res) ->
     collName = "log:#{ org }:#{ data.type }"
     coll = db.collection collName
 
-    handler = loghandlers.get(data.type)
+    handler = logHandlers.get(data.type)
 
     meta =
       org: org
