@@ -11,6 +11,11 @@ define [
 
     # Client collection from a log packet
     update: (packet) ->
+      if packet.wlan_event is "hotspot_state"
+        return @setState packet
+
+
+
       client = @get packet.mac
 
       # Just update existing client
@@ -21,6 +26,9 @@ define [
         client = new @model packet
         @add client
 
+    setState: (packet) ->
+      console.info "state packet", packet
+      debugger
 
     activeClientCount: ->
       connectedCount = @reduce (memo, m) ->

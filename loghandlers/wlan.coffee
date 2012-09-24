@@ -3,8 +3,8 @@ oui = require "../lib/oui"
 
 module.exports = (puavo) -> (data, meta, cb) ->
 
-  if not data.mac
-    console.error "Ignoring wlan packet. 'mac' missing", data
+  if not data.mac and data.wlan_event isnt "hotspot_state"
+    console.error "Ignoring wlan packet. Packet is not hotspot_state packet or 'mac' is missing", data
     return cb()
 
   if not data.hostname
@@ -13,7 +13,8 @@ module.exports = (puavo) -> (data, meta, cb) ->
 
   data.client_hostname = puavo.lookupDeviceName(meta.org, data.mac)
 
-  data.client_manufacturer = oui.lookup data.mac
+  if data.mac
+    data.client_manufacturer = oui.lookup data.mac
 
   if data.school_id = puavo.lookupSchoolId(meta.org, data.hostname)
     data.school_name = puavo.lookupSchoolName(meta.org, data.school_id)
