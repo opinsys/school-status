@@ -95,5 +95,21 @@ class Puavo extends EventEmitter
   lookupSchoolId: (org, deviceHostname) ->
     @organisationDevicesByHostname[org]?[deviceHostname]?.school_id
 
+  authentication: (org, dn, password, cb) ->
+    console.log "Authentication"
+    auth = "Basic " + new Buffer(dn + ":" + password).toString("base64");
+    request {
+      method: 'GET',
+      url: @organisations[org].puavoDomain + "/devices/auth.json",
+      headers:  {"Authorization" : auth}
+    }, (err, res, body) ->
+      if !err && res.statusCode == 200
+        return cb err, JSON.parse(body)
+      else
+        if err
+          console.log "Info: Can't connect to Puavo server: ", err
+        return cb err, false
+    
+  
 
 module.exports = Puavo
