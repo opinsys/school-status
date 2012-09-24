@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# Mimic wlan events from the relay
 
 curl -d @- -X POST -H 'Content-Type: application/json' http://localhost:8080/log << EOF
 {
@@ -11,10 +12,7 @@ curl -d @- -X POST -H 'Content-Type: application/json' http://localhost:8080/log
   "relay_hostname": "ltsp11",
   "relay_puavo_domain": "esbo.opinsys.fi",
   "hostname": "ml-a215-ope",
-  "relay_timestamp": 1348134880,
-  "client_manufacturer": "Hon Hai Precision Ind. Co.,Ltd.",
-  "school_id": "11121",
-  "school_name": "Mattlidens skola"
+  "relay_timestamp": 1348134880
 }
 EOF
 
@@ -31,9 +29,6 @@ curl -d @- -X POST -H 'Content-Type: application/json' http://localhost:8080/log
   "relay_hostname": "ltsp11",
   "relay_puavo_domain": "esbo.opinsys.fi",
   "hostname": "ml-a215-ope",
-  "relay_timestamp": 1348134880,
-  "client_manufacturer": "Hon Hai Precision Ind. Co.,Ltd.",
-  "school_id": "11121",
-  "school_name": "Mattlidens skola"
+  "relay_timestamp": 1348134880
 }
 EOF
