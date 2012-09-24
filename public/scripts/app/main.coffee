@@ -4,6 +4,7 @@ define [
   "backbone"
   "uri"
   "socket.io"
+  "cs!app/logrouter"
   "cs!app/models/wlanhostmodel"
   "cs!app/models/schoolmodel"
   "cs!app/models/wlanclientcollection"
@@ -16,6 +17,7 @@ define [
   Backbone
   URI
   io
+  LogRouter
   WlanHostModel
   SchoolModel
   WlanClientCollection
@@ -24,14 +26,12 @@ define [
   url
 ) -> $ ->
 
-
-
   schoolModel = new SchoolModel
     name: url.currentOrg
 
   $.get "/schools/#{ url.currentOrg }", (schools, status, res) =>
     if status isnt "success"
-      console.error res
+      console.error "failed to fetch school list", res
       throw new Error "failed to fetch school list"
 
     schoolName = schools[url.currentSchoolId]
@@ -46,6 +46,12 @@ define [
   loading = $(".loading")
 
   clients = new WlanClientCollection
+  hosts = new Backbone.Collection
+
+  logRouter = new LogRouter
+    clients: clients
+    hosts: hosts
+    school: schoolModel
 
   historySize = URI(window.location.href).query(true)?.events || 2000
 
@@ -53,18 +59,18 @@ define [
   $.get "/log/#{ url.currentOrg }/#{ url.currentSchoolId }/wlan?limit=#{ historySize }", (logArr, status, res) ->
 
     if status isnt "success"
-      console.info res
+      console.info "failed to fetch previous log data", res
       throw new Error "failed to fetch previous log data"
 
     console.info "Loaded #{ logArr.length } entries from db"
 
     loading.text "Updating models..."
     for packet in logArr
-      schoolModel.logEvent()
-      clients.update packet
+      logRouter.handle packet
 
     layout = new MainLayout
       clients: clients
+      hosts: hosts
       model: schoolModel
 
     layout.render()
@@ -87,9 +93,7 @@ define [
     console.info "Listening #{ collName }"
 
     socket.on collName, (packet) ->
-      console.info "#{ packet.mac } #{ packet.event } to/from #{ packet.hostname }", packet
-      schoolModel.logEvent()
-      clients.update packet
+      logRouter.handle packet
 
     socket.on "connect", ->
       loading.remove()

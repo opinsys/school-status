@@ -11,6 +11,6 @@ define [
     constructor: ->
       super
 
-    logEvent: ->
+    incEventCount: ->
       count = @get("eventCount") or 0
       @set "eventCount", count + 1

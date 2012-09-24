@@ -24,11 +24,8 @@ define [
     templateQuery: "#wlan-layout"
 
 
-    constructor: (opts) ->
+    constructor: ({@hosts, @clients}) ->
       super
-
-      @clients = opts.clients
-      @hosts = new Backbone.Collection
 
       @router = new Router
         clients: @clients
@@ -43,30 +40,23 @@ define [
           model: @model
         ".wlan-hosts": []
 
-      @model.on "change:title", =>
+      @hosts.each (model) => @_addViewForHost model
+
+      @model.on "change:title", => @render()
+      @hosts.on "add", (model) =>
+        @_addViewForHost model
         @render()
 
-      @clients.on "add change", (model) => @createHostFromClient model
-      @clients.each (model) => @createHostFromClient model
+    _addViewForHost: (model) ->
+        view = new WlanStats
+          model: model
+          collection: @clients
+        @subViews[".wlan-hosts"].push view
 
     animateAll: ->
       for view in @subViews[".wlan-hosts"]
         view.animate()
 
-    createHostFromClient: (client) ->
-
-      # Create new WlanHostModel if this client introduces new Wlan Host
-      if not @hosts.get(client.get("hostname"))
-        hostModel = new WlanHostModel
-          id: client.get("hostname")
-          allClients: @clients
-
-        @hosts.add  hostModel
-        view = new WlanStats
-          model: hostModel
-          collection: @clients
-        @subViews[".wlan-hosts"].push view
-        @render()
 
     viewJSON: ->
       schoolName: @model.get "schoolName"
