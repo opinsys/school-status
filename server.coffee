@@ -143,7 +143,7 @@ app.post "/log", (req, res) ->
       console.error "Failed to parse organisation key from '#{ data.relay_puavo_domain }'. Ignoring packet."
       return
 
-    puavo.authentication org, req.headers["authorization"], (err, status) ->
+    puavo.authentication org, req.auth, (err, status) ->
       if !err && status == true
         # console.log "Authentication succesfully"
         # console.log "STATUS", status

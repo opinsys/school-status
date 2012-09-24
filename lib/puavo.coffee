@@ -1,5 +1,6 @@
 {EventEmitter} = require "events"
 request = require("request")
+crypto = require("crypto")
 
 class Puavo extends EventEmitter
 
@@ -11,6 +12,7 @@ class Puavo extends EventEmitter
     @organisationSchoolsById = {}
     @organisationDevicesByHostname = {}
 
+    @serverAuthentication = {}
 
   pollStart: ->
     do timeoutLoop = =>
@@ -95,28 +97,40 @@ class Puavo extends EventEmitter
   lookupSchoolId: (org, deviceHostname) ->
     @organisationDevicesByHostname[org]?[deviceHostname]?.school_id
 
-  authentication: (org, authorization, cb) ->
-    if !authorization
+  authentication: (org, auth, cb) ->
+    if !auth
       return cb(new Error('Authorization headers not found'), false)
 
-    token = authorization.split(/\s+/).pop() || ''
-    auth = new Buffer(token, 'base64').toString()
-    [dn, password] = auth.split(/:/)
+    shasum = crypto.createHash('sha1')
+    shasum.update(auth.username)
+    shasum.update(auth.password)
+    serverKey = shasum.digest('base64')
 
-    console.log "Authentication"
-    auth = "Basic " + new Buffer(dn + ":" + password).toString("base64");
+    if cacheStatus = @serverAuthentication[serverKey]
+      if Date.now() - cacheStatus.timestamp < 3600 * 1000
+        console.log "Authentication from cache"
+        return cb null, cacheStatus.status
+
+    console.log "Authentication from Puavo"
+    puavoAuth = "Basic " + new Buffer(auth.username + ":" + auth.password).toString("base64");
     request {
       method: 'GET',
       url: @organisations[org].puavoDomain + "/devices/auth.json",
-      headers:  {"Authorization" : auth}
-    }, (err, res, body) ->
-      if !err && res.statusCode == 200
-        return cb err, JSON.parse(body)
-      else
-        if err
-          console.log "Info: Can't connect to Puavo server: ", err
-        return cb err, false
-    
+      headers:  {"Authorization" : puavoAuth}
+    }, (err, res, body) =>
+      if err
+        return cb err
+      if res.statusCode != 200
+        return cb new Error("Bad status code: #{res.statusCode}")
+
+      try 
+        status = JSON.parse(body)
+      catch err
+        return cb err
+
+      @serverAuthentication[serverKey] = { status: status, timestamp: Date.now() }
+  
+      return cb null, status
   
 
 module.exports = Puavo
