@@ -95,7 +95,14 @@ class Puavo extends EventEmitter
   lookupSchoolId: (org, deviceHostname) ->
     @organisationDevicesByHostname[org]?[deviceHostname]?.school_id
 
-  authentication: (org, dn, password, cb) ->
+  authentication: (org, authorization, cb) ->
+    if !authorization
+      return cb(new Error('Authorization headers not found'), false)
+
+    token = authorization.split(/\s+/).pop() || ''
+    auth = new Buffer(token, 'base64').toString()
+    [dn, password] = auth.split(/:/)
+
     console.log "Authentication"
     auth = "Basic " + new Buffer(dn + ":" + password).toString("base64");
     request {
