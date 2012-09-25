@@ -4,6 +4,8 @@ crypto = require("crypto")
 
 request = request.defaults jar: false
 
+CACHE_AGE = 3600
+
 class Puavo extends EventEmitter
 
   constructor: (config) ->
@@ -101,7 +103,7 @@ class Puavo extends EventEmitter
 
   authentication: (org, auth, cb) ->
     if !auth
-      return cb(new Error('Authorization headers not found'), false)
+      return cb(new Error('Puavo Auth: Authorization headers not found'), false)
 
     shasum = crypto.createHash('sha1')
     shasum.update(auth.username)
@@ -109,30 +111,35 @@ class Puavo extends EventEmitter
     serverKey = shasum.digest('base64')
 
     if cacheStatus = @serverAuthentication[serverKey]
-      if Date.now() - cacheStatus.timestamp < 3600 * 1000
-        console.log "Authentication from cache"
+      diff = Date.now() - cacheStatus.timestamp
+      diff = diff / 1000
+      if diff < CACHE_AGE
+        console.log "Authentication ok for #{ auth.username } (cache #{ CACHE_AGE - diff }s)"
         return cb null, cacheStatus.status
 
-    console.log "Authentication from Puavo"
     puavoAuth = "Basic " + new Buffer(auth.username + ":" + auth.password).toString("base64");
     request {
       method: 'GET',
       url: @organisations[org].puavoDomain + "/devices/auth.json",
       headers:  {"Authorization" : puavoAuth}
     }, (err, res, body) =>
+
       if err
         return cb err
-      if res.statusCode != 200
-        return cb new Error("Bad status code: #{res.statusCode}")
-
-      try 
+      if res.statusCode isnt 200
+        return cb new Error "Puavo Auth: Bad status code: #{res.statusCode}"
+      try
         status = JSON.parse(body)
-      catch err
+      catch e
+        err = new Error "Puavo Auth: bad json"
+        err.originalError = e
         return cb err
 
-      @serverAuthentication[serverKey] = { status: status, timestamp: Date.now() }
-  
+      console.info "Puavo authentication ok for #{ auth.username }"
+      @serverAuthentication[serverKey] =
+        status: status
+        timestamp: Date.now()
+
       return cb null, status
-  
 
 module.exports = Puavo

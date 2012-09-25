@@ -144,41 +144,40 @@ app.post "/log", (req, res) ->
       return
 
     puavo.authentication org, req.auth, (err, status) ->
-      if !err && status == true
-        # console.log "Authentication succesfully"
-        # console.log "STATUS", status
+      throw err if err
 
-        if not data.type or data.type is "unknown"
-          data.type = "unknown"
-          console.error "Unknown type or missing! #{ data.type }"
+      if not status
+        console.info "Failed authenticate #{ req.auth.username }. Ignoring packet"
+        return
 
-        collName = "log:#{ org }:#{ data.type }"
-        coll = db.collection collName
+      if not data.type or data.type is "unknown"
+        data.type = "unknown"
+        console.error "Unknown type or missing! #{ data.type }"
 
-        handler = logHandlers.get(data.type)
+      collName = "log:#{ org }:#{ data.type }"
+      coll = db.collection collName
 
-        meta =
-          org: org
-          db: db
-          coll: coll
-          collName: collName
+      handler = logHandlers.get(data.type)
 
-        handler data, meta, (err, data) ->
+      meta =
+        org: org
+        db: db
+        coll: coll
+        collName: collName
+
+      handler data, meta, (err, data) ->
+        throw err if err
+
+        # Packet ignored by log handler
+        return if not data
+
+        # Send to browser clients
+        sio.sockets.emit collName, data
+
+        # Save to database
+        coll.insert data, (err, docs) ->
           throw err if err
-
-          # Packet ignored by log handler
-          return if not data
-
-          # Send to browser clients
-          sio.sockets.emit collName, data
-
-          # Save to database
-          coll.insert data, (err, docs) ->
-            throw err if err
-            console.info "Log saved to #{ org }/#{ collName }"
-      else
-        console.info "Server authentication failed. Don't save log to database"
-        console.info "Error: ", err
+          console.info "Log saved to #{ org }/#{ collName }"
 
 
 
