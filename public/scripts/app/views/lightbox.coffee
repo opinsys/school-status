@@ -1,7 +1,12 @@
 define [
   "cs!app/views/layout"
   "underscore"
-], (Layout, _) ->
+  "backbone"
+], (
+  Layout
+  Backbone
+  _
+) ->
 
   class Lightbox extends Layout
 

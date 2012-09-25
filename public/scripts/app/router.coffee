@@ -40,15 +40,26 @@ define [
 
 
     showClient: (id) ->
-      model = @clients.get id
-      @_lightboxView new WlanClientDetails
-        hosts: @hosts
-        model: model
+      if model = @clients.get id
+        @_lightboxView new WlanClientDetails
+          hosts: @hosts
+          model: model
+      else
+        @_showError "Unknown wlan client #{ id }"
 
     showHost: (id) ->
-      model = @hosts.get id
-      @_lightboxView new WlanHostDetails
-        model: model
+      if model = @hosts.get id
+        @_lightboxView new WlanHostDetails
+          model: model
+      else
+        @_showError "Unknown wlan host #{ id }"
+
+    _showError: (msg) ->
+      view = new Backbone.View
+      view.render = ->
+        @$el.html "<h1 class=error>Error</h1><p>#{msg}</p>"
+      @_lightboxView view
+
 
     _lightboxView: (view) ->
       lb = new Lightbox view: view
