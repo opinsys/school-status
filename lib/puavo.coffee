@@ -2,6 +2,8 @@
 request = require("request")
 crypto = require("crypto")
 
+request = request.defaults jar: false
+
 class Puavo extends EventEmitter
 
   constructor: (config) ->
