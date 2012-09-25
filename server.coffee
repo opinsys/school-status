@@ -125,7 +125,7 @@ app.post "/log", (req, res) ->
   d = domain.create()
   d.on "error", (err) ->
     console.error "Failed to save log data"
-    console.error err.stack
+    console.error err, err.stack
 
   d.run -> process.nextTick ->
 
