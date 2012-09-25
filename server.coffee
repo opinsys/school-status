@@ -175,7 +175,6 @@ app.post "/log", (req, res) ->
         # Save to database
         coll.insert data, (err, docs) ->
           throw err if err
-          console.info "Log saved to #{ org }/#{ collName }"
 
 
 
