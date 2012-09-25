@@ -97,7 +97,7 @@ define [
 
     socket.on "connect", ->
       loading.remove()
-      console.info "Connected to websocket server"
+      console.info "Connected to websocket server. All ready."
 
 
 
