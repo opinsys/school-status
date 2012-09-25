@@ -151,27 +151,27 @@ app.post "/log", (req, res) ->
         if not data.type or data.type is "unknown"
           data.type = "unknown"
           console.error "Unknown type or missing! #{ data.type }"
-    
+
         collName = "log:#{ org }:#{ data.type }"
         coll = db.collection collName
-    
+
         handler = logHandlers.get(data.type)
-    
+
         meta =
           org: org
           db: db
           coll: coll
           collName: collName
-    
+
         handler data, meta, (err, data) ->
           throw err if err
-    
+
           # Packet ignored by log handler
           return if not data
-    
+
           # Send to browser clients
           sio.sockets.emit collName, data
-    
+
           # Save to database
           coll.insert data, (err, docs) ->
             throw err if err
