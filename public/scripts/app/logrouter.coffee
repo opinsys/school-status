@@ -25,7 +25,6 @@ define [
 
     # Handle event packet. Adds or updates given client
     _setClient: (packet) ->
-      console.info "Updating client from", packet
       client = @clients.get packet.mac
 
       # Just update existing client
@@ -81,7 +80,6 @@ define [
     _createHostFromClient: (packet) ->
 
       if not @hosts.get(packet.hostname)
-        console.info "creating new host view", packet.hostname
         @hosts.add new WlanHostModel
           id: packet.hostname
           allClients: @clients
