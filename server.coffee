@@ -122,8 +122,6 @@ app.get "/log/:org/:schoolId/:type", (req, res) ->
 # Logs any given POST data to given MongoDB collection.
 app.post "/log", (req, res) ->
 
-  # TODO: validate req.auth
-
   d = domain.create()
   d.on "error", (err) ->
     console.error "Failed to save log data"
