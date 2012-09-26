@@ -145,7 +145,7 @@ app.post "/log", (req, res) ->
       throw err if err
 
       if not status
-        console.info "Failed authenticate #{ req.auth.username }. Ignoring packet"
+        console.info "Failed authenticate #{ req.auth?.username }. Ignoring packet."
         return
 
       if not data.type or data.type is "unknown"

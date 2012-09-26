@@ -115,7 +115,6 @@ class Puavo extends EventEmitter
       diff = Date.now() - cacheStatus.timestamp
       diff = diff / 1000
       if diff < CACHE_AGE
-        console.log "Authentication ok for #{ auth.username } (cache #{ CACHE_AGE - diff }s)"
         return cb null, cacheStatus.status
 
     puavoAuth = "Basic " + new Buffer(auth.username + ":" + auth.password).toString("base64");
