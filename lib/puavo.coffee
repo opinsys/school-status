@@ -102,8 +102,9 @@ class Puavo extends EventEmitter
     @organisationDevicesByHostname[org]?[deviceHostname]?.school_id
 
   authentication: (org, auth, cb) ->
-    if !auth
-      return cb(new Error('Puavo Auth: Authorization headers not found'), false)
+
+    if not auth?.username or not auth?.password
+      return cb null, false
 
     shasum = crypto.createHash('sha1')
     shasum.update(auth.username)
