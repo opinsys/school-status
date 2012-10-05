@@ -68,7 +68,9 @@ define [
       moreUrl =  url.query(events: eventCount + 1000).toString()
       lessUrl =  url.query(events: Math.max(eventCount - 1000, 1000)).toString()
 
-      connectedCount: @clients.activeClientCount()
+      connectedCount: @clients.reduce (memo, m) ->
+        if m.isConnected() then memo+1 else memo
+      , 0
       seenCount: @clients.size()
       hostCount: @hosts.size()
       eventCount: eventCount

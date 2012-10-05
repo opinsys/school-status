@@ -28,5 +28,8 @@ define [
       if model.get("hostname") is @id
         @clients.add model
 
-    activeClientCount: -> @clients.activeClientCount()
+    activeClientCount: ->
+      @clients.reduce (memo, m) =>
+        if m.get("hostname") is @id then memo+1 else memo
+      , 0
 

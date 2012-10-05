@@ -8,8 +8,3 @@ define [
   class WlanClientCollection extends Backbone.Collection
 
     model: WlanClientModel
-
-    activeClientCount: ->
-      connectedCount = @reduce (memo, m) ->
-        if m.isConnected() then memo+1 else memo
-      , 0

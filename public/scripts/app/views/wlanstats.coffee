@@ -32,15 +32,17 @@ define [
       if @_animationTimer
         return
 
-      if @model.clients.activeClientCount() is @_previousCount
+      if @model.activeClientCount() is @_previousCount
         return
 
-      if @model.clients.activeClientCount() > @_previousCount
+      if @model.activeClientCount() > @_previousCount
         @_animateConnect()
       else
         @_animateDisconnect()
 
-      @_previousCount = @model.clients.activeClientCount()
+      @_previousCount = @model.activeClientCount()
+
+
 
       @_animationTimer = setTimeout =>
         @_clearAnimation()
@@ -63,7 +65,7 @@ define [
 
     # Visual presentation of a wlan host compared to others in scale of 0-10
     wlanBarCount: ->
-      count = @model.clients.activeClientCount()
+      count = @model.activeClientCount()
 
       # No bars if no clients
       if count is 0
@@ -74,7 +76,7 @@ define [
         return 1
 
       largestHost = _.max @model.collection.map (m) ->
-        m.clients.activeClientCount()
+        m.activeClientCount()
 
       # Otherwise just scale bars to largest host
       return Math.round count / largestHost * 12, 1
