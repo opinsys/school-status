@@ -29,7 +29,7 @@ define [
 
       # Just update existing client
       if client
-        client.set packet
+        client.update packet
       else
         # Add packet as new client
         @clients.add new WlanClientModel packet
