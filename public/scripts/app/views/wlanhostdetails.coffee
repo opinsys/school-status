@@ -55,5 +55,5 @@ define [
         count: @model.activeClientCount()
         name: @model.id
         connected: connected
-        seen: seen.slice(0,10)
+        seen: seen
       }
