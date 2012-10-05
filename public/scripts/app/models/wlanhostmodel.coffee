@@ -24,13 +24,9 @@ define [
       @allClients.on "add change", (model, e) =>
         @handleClient model
 
-
-
     handleClient: (model) ->
       if model.get("hostname") is @id
         @clients.add model
-      else
-        @clients.remove model
 
     activeClientCount: -> @clients.activeClientCount()
 
