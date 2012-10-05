@@ -42,7 +42,7 @@
         </tr>
         <tr>
           <th>Current Wlan Host</th>
-          <td><a class="host" href="#" data-host="{{hostname}}">{{hostname}}</a></td>
+          <td><a class="host" href="{{hostLink hostname}}" data-host="{{hostname}}">{{hostname}}</a></td>
         </tr>
         <tr>
           <th>Manufacturer</th>
@@ -63,7 +63,7 @@
         </tr>
         {{#each history}}
         <tr>
-        <td><a href="#" class="host" data-host="{{hostname}}">{{hostname}}</a></td>
+        <td><a href="{{hostLink hostname}}" class="host" data-host="{{hostname}}">{{hostname}}</a></td>
         <td>{{event}}</td>
         <td title="{{ago}}" >{{time}}</td>
         </tr>
@@ -91,7 +91,7 @@
 
             {{#each connected}}
             <tr>
-            <td><a href="#" class="client" data-mac="{{mac}}" >{{mac}}</a></td>
+            <td><a href="{{clientLink mac}}" class="client" data-mac="{{mac}}" >{{mac}}</a></td>
             <td title="{{ago}}" >{{time}}</td>
             <td class="manufacturer" title="{{manufacturer}}">{{manufacturer}}</td>
             <td>{{clientHostname}}</td>
@@ -113,7 +113,7 @@
 
             {{#each seen}}
             <tr>
-              <td><a href="#" class="client" data-mac="{{mac}}" >{{mac}}</a></td>
+            <td><a href="{{clientLink mac}}" class="client" data-mac="{{mac}}" >{{mac}}</a></td>
               <td title="{{ago}}" >{{time}}</td>
               <td class="manufacturer" title="{{manufacturer}}" >{{manufacturer}}</td>
               <td>{{clientHostname}}</td>

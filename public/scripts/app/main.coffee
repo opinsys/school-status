@@ -4,6 +4,7 @@ define [
   "backbone"
   "uri"
   "socket.io"
+  "cs!app/handlebarshelpers"
   "cs!app/logrouter"
   "cs!app/models/wlanhostmodel"
   "cs!app/models/schoolmodel"
@@ -17,6 +18,7 @@ define [
   Backbone
   URI
   io
+  __
   LogRouter
   WlanHostModel
   SchoolModel
