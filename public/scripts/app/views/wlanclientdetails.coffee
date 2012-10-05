@@ -33,6 +33,7 @@ define [
 
       return {
         mac: @model.id
+        hostname: @model.get "hostname"
         manufacturer: @model.get "client_manufacturer"
         history: history
         clientHostname: @model.get "client_hostname"
