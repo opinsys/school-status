@@ -12,23 +12,23 @@ define [
       super
       @history = []
 
-      @on "change add", (model) =>
-        @history.unshift
-          event: model.get("event")
-          hostname: model.get("hostname")
-          timestamp: model.get("relay_timestamp")
-
-
-    isConnected: ->
-      @get("event") is @connectEvent
-
+    isConnected: -> !!@get("hostname")
 
     update: (packet) ->
+
+      @history.unshift
+        event: packet.event
+        hostname: packet.hostname
+        timestamp: packet.relay_timestamp
+
+      # Connected to a new host
       if packet.event is @connectEvent
         return @set packet
 
       # This is disconnect event for the current wlan host
       if packet.hostname is @get("hostname")
+        packet = _.clone packet
+        packet.hostname = null
         return @set packet
 
       # Otherwise it is a delayed disconnect event from some previous host.

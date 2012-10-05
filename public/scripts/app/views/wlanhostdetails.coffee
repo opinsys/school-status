@@ -43,7 +43,7 @@ define [
       seen = []
 
       @model.clients.each (m) =>
-        if m.isConnected()
+        if m.get("hostname") is @model.id
           connected.push @formatClient m
         else
           seen.push @formatClient m
