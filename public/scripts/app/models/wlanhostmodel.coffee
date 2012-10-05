@@ -34,15 +34,3 @@ define [
 
     activeClientCount: -> @clients.activeClientCount()
 
-    connectedClients: (fn) ->
-      @clients.filter (m) -> m.isConnected()
-
-    seenClients: (fn) ->
-      array = []
-      @clients.each (m) ->
-        if m.isConnected()
-          array.push fn m
-      return array
-
-
-
