@@ -103,6 +103,10 @@ class Puavo extends EventEmitter
 
   authentication: (org, auth, cb) ->
 
+    if not @organisations[org]
+      console.error "Unknown organisation '#{ org }'"
+      return cb null, false
+
     if not auth?.username or not auth?.password
       return cb null, false
 
