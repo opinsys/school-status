@@ -1,23 +1,25 @@
 
 oui = require "../lib/oui"
 
-module.exports = (puavo) -> (data, meta, cb) ->
+# Handle wlan type packages.
+# Add devices hostname and client manufacturer by mac
+module.exports = (puavo) -> (meta, data, cb) ->
 
-  if not data.mac and data.wlan_event isnt "hotspot_state"
-    console.error "Ignoring wlan packet. Packet is not hotspot_state packet or 'mac' is missing", data
-    return cb()
+  # error return
+  rerr = (msg) ->
+    console.error "Bad wlan packet: #{ msg }"
+    cb null, meta, data
+
+  if not data.mac
+    return rerr "mac is missing"
+
+  if data.wlan_event isnt "hotspot_state"
+    return rerr "'wlan_event' isn't 'hotspot_state'"
 
   if not data.hostname
-    console.error "Ignoring wlan packet. 'hostname' missing", data
-    return cb()
+    return rerr "'hostname' is missing"
 
   data.client_hostname = puavo.lookupDeviceName(meta.org, data.mac)
+  data.client_manufacturer = oui.lookup(data.mac)
+  cb null, meta, data
 
-  if data.mac
-    data.client_manufacturer = oui.lookup data.mac
-
-  if data.school_id = puavo.lookupSchoolId(meta.org, data.hostname)
-    data.school_name = puavo.lookupSchoolName(meta.org, data.school_id)
-    return cb null, data
-
-   return cb new Error "Cannot find school for #{ meta.org }/#{ data.hostname }"
