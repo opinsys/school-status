@@ -2,7 +2,7 @@
 async = require "async"
 
 # Logs any given POST data to given MongoDB collection.
-module.exports = (db, puavo) ->
+module.exports = (db, sio, puavo) ->
 
   ###*
   # Add school information to a logrelay packet
@@ -82,7 +82,7 @@ module.exports = (db, puavo) ->
       async.waterfall [
         (cb) -> cb null, meta, data # inject meta&data into waterfall
         addSchool
-        loghandlers[data.type] or (data, cb) -> cb null, data
+        logHandlers[data.type] or (meta, data, cb) -> cb null, meta, data
       ], (err, meta, data) ->
 
         if err
@@ -99,4 +99,6 @@ module.exports = (db, puavo) ->
         coll.insert data, (err, docs) ->
           if err
             console.error "Data insertion to mongo failed", err
+          else
+            console.log "Saved", docs
 
