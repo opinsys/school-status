@@ -12,11 +12,15 @@ module.exports = (db) -> (req, res) ->
   collName = "log:#{ org }:desktop"
   coll = db.collection collName
 
-  machines = {}
+  machines =
+    details: {}
+    poweredOn: 0
+    loggedIn: 0
+
 
   coll.find(search).sort({ relay_timestamp: -1 }).forEach (doc) ->
 
-    out = machines[doc.hostname] ?= { events: [] }
+    out = machines.details[doc.hostname] ?= { events: [] }
 
     out = _.extend(out, _.pick(
       doc
@@ -37,6 +41,17 @@ module.exports = (db) -> (req, res) ->
   , (err) ->
     if err
       return res.json err
+
+    machines.total = _.size(machines.details)
+
+    _.each _.values(machines.details), (machine) ->
+
+      if _.last(machine.events).event isnt "shutdown"
+        machines.poweredOn += 1
+
+      if _.last(machine.events).event is "login"
+        machines.loggedIn += 1
+
     res.json machines
 
 
