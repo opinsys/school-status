@@ -47,7 +47,7 @@ app.get "/:org", (req, res) ->
   res.render "orgindex", appLoad: appLoad
 
 app.get "/schools/:org", require("./routes/schools")(db)
-app.get "/log/:org/:schoolId/:type", require("./routes/wlan_history")(db)
+app.get "/log/:org/:schoolId/:type", require("./routes/log_history")(db)
 app.post "/log", require("./routes/log")(db, sio, puavo)
 
 puavo.on "ready", ->
