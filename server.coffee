@@ -6,17 +6,16 @@ http = require "http"
 express = require "express"
 io = require "socket.io"
 stylus = require "stylus"
-Mongolian = require "mongolian"
 engines = require "consolidate"
 _  = require "underscore"
 
 config = require "./config.json"
 Puavo = require "./lib/puavo"
 
-mongo = new Mongolian
+db = require "./lib/db"
+
 app = express()
 httpServer = http.createServer(app)
-db = mongo.db "ltsplog"
 sio = io.listen httpServer
 puavo = new Puavo config
 
@@ -47,7 +46,9 @@ app.get "/:org", (req, res) ->
   res.render "orgindex", appLoad: appLoad
 
 app.get "/schools/:org", require("./routes/schools")(db)
-app.get "/desktops/:org", require("./routes/desktops")(db)
+
+app.use "/desktops", require("./routes/desktop")(db)
+
 app.get "/log/:org/:schoolId/:type", require("./routes/log_history")(db)
 app.post "/log", require("./routes/log")(db, sio, puavo)
 
