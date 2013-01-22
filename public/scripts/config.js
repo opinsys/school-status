@@ -1,4 +1,7 @@
 require.config({
+  hbs: {
+    disableI18n: true
+  },
   shim: {
     underscore: {
       exports: "_"
@@ -21,6 +24,8 @@ require.config({
     jquery: "vendor/jquery",
     handlebars: "vendor/handlebars",
     underscore: "vendor/underscore",
+    json2: "vendor/json2",
+    i18nprecompile: "vendor/i18nprecompile",
     backbone: "vendor/backbone",
     moment: "vendor/moment",
     uri: "vendor/URI",
