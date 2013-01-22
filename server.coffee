@@ -47,7 +47,13 @@ app.get "/:org", (req, res) ->
 
 app.get "/schools/:org", require("./routes/schools")(db)
 
-app.use "/desktops", require("./routes/desktop")(db)
+app.get "/desktop/:organisation", (req, res) ->
+  res.render "spa_base",
+    type: appLoad
+    name: "desktop"
+
+app.use "/api/desktop", require("./routes/desktop")(db)
+
 
 app.get "/log/:org/:schoolId/:type", require("./routes/log_history")(db)
 app.post "/log", require("./routes/log")(db, sio, puavo)
