@@ -2,14 +2,18 @@ define [
   "jquery"
   "underscore"
   "socket.io"
+  "backbone"
 
-  "hbs!app/desktop/templates/index"
+  "cs!app/desktop/desktop_model"
+  "cs!app/desktop/summary_view"
 ], (
   $
   _
   io
+  Backbone
 
-  template
+  DesktopModel
+  SummaryView
 ) -> $ ->
 
   urlMatch = window.location.toString().match(/\/desktop\/(\w+)/)
@@ -17,32 +21,18 @@ define [
     throw new Error "Bad url! #{ window.location }"
   organisation = urlMatch[1]
 
+  $("title").text("Desktop statistics for #{ organisation }")
+
+
+  sm = new DesktopModel null, organisation: organisation
+  summary = new SummaryView model: sm
+
+  $("body").html(summary.el)
+
+  sm.fetch()
+
   socket = io.connect()
   socket.on "connect", (c) ->
     socket.emit "join", "log:#{ organisation }:desktop"
-
   socket.on "packet", (packet) ->
-    console.log "got packet", packet
-
-  $.ajax({
-    url: "/api/desktop/#{ organisation }"
-  }).done (data) ->
-
-    summary = {
-      poweredOnCount: 0
-      loggedInCount: 0
-      total: 0
-    }
-
-    _.each _.values(data), (machine) ->
-
-      if machine.powerOn
-        summary.poweredOnCount += 1
-
-      if machine.loggedIn
-        summary.loggedInCount += 1
-
-      summary.total += 1
-
-    $("body").html(template(summary))
-    $("title").text($("h1").text())
+    sm.fetch()
