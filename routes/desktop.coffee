@@ -17,6 +17,7 @@ module.exports = (db) ->
 
     parseSummary req.collection, (err, results) ->
       if err
+        console.error "Failed to get organisation info", err
         res.json 500, err
       else
         res.json results
