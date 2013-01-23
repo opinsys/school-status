@@ -49,9 +49,10 @@ module.exports = (db, sio, puavo) ->
     res.json message: "thanks"
 
     data = req.body
-    console.log "got data", data
+    console.log "http got packet", data
     fullOrg = data.relay_puavo_domain
 
+    # All characters before the first dot
     if match = data.relay_puavo_domain.match(/^([^\.]+)/)
       org = match[1]
     else
@@ -100,5 +101,5 @@ module.exports = (db, sio, puavo) ->
           if err
             console.error "Data insertion to mongo failed", err
           else
-            console.log "Saved", docs
+            console.log "saved", docs
 

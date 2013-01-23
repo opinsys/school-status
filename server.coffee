@@ -9,6 +9,14 @@ stylus = require "stylus"
 engines = require "consolidate"
 _  = require "underscore"
 
+clim = require "clim"
+_write = clim.logWrite
+clim.logWrite = (level, prefixes, msg) ->
+  return if level is "LOG"
+  _write(level, prefixes, msg)
+clim(console, true)
+
+
 config = require "./config.json"
 Puavo = require "./lib/puavo"
 

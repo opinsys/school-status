@@ -19,5 +19,6 @@
       , "consolidate": ""
       , "requirejs": ""
       , "stylus-spriting": ""
+      , "clim": ""
   }
 }

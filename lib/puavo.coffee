@@ -65,7 +65,7 @@ class Puavo extends EventEmitter
             @organisationSchoolsById[key][school.puavo_id] = {}
             @organisationSchoolsById[key][school.puavo_id]["name"] = school.name
         else
-          console.log("Can't connect to puavo server: ", error)
+          console.error("Can't connect to puavo server: ", error)
         done error
 
       # Get devices
@@ -88,7 +88,7 @@ class Puavo extends EventEmitter
               @organisationDevicesByMac[key][ device.mac_address ] = {}
               @organisationDevicesByMac[key][ device.mac_address ]["hostname"] = device.hostname
         else
-          console.log("Can't connect to puavo server: ", error)
+          console.error("Can't connect to puavo server: ", error)
 
         done error
 

@@ -85,7 +85,7 @@ if require.main is module
   collection = db.collection("log:kehitys:desktop")
 
   parseMachineDetails collection, "lucidankka", (err, machine) ->
-    console.log err, machine
+    console.info err, machine
 
   parseSummary collection, (err, res) ->
-    console.log err, res
+    console.info err, res
