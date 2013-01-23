@@ -12,7 +12,7 @@ _  = require "underscore"
 clim = require "clim"
 _write = clim.logWrite
 clim.logWrite = (level, prefixes, msg) ->
-  return if level is "LOG" and process.NODE_ENV is "production"
+  return if level is "LOG" and process.env.NODE_ENV is "production"
   _write(level, prefixes, msg)
 clim(console, true)
 
