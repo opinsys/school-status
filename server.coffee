@@ -70,4 +70,18 @@ puavo.on "ready", ->
   httpServer.listen 8080, ->
     console.info "Server is listening on 8080"
 
+logUsers = (room) ->
+  userCount = sio.sockets.manager.rooms["/" + room].length
+  console.info "There are now #{ userCount} users in room #{ room }"
+
+sio.sockets.on "connection", (socket) ->
+  socket.on "join", (room) ->
+    socket.join(room)
+    console.info "Socket joined to", room
+    logUsers(room)
+
+    socket.on "disconnect",  ->
+      console.info "Socket disconnected from", room
+      logUsers(room)
+
 puavo.pollStart()

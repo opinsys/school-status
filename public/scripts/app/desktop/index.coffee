@@ -1,18 +1,31 @@
 define [
   "jquery"
   "underscore"
+  "socket.io"
 
   "hbs!app/desktop/templates/index"
 ], (
   $
   _
+  io
 
   template
 ) -> $ ->
 
+  urlMatch = window.location.toString().match(/\/desktop\/(\w+)/)
+  if not urlMatch
+    throw new Error "Bad url! #{ window.location }"
+  organisation = urlMatch[1]
+
+  socket = io.connect()
+  socket.on "connect", (c) ->
+    socket.emit "join", "log:#{ organisation }:desktop"
+
+  socket.on "packet", (packet) ->
+    console.log "got packet", packet
 
   $.ajax({
-    url: "/api/desktop/kehitys"
+    url: "/api/desktop/#{ organisation }"
   }).done (data) ->
 
     summary = {

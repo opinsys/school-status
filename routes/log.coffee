@@ -94,7 +94,7 @@ module.exports = (db, sio, puavo) ->
         return if not data
 
         # Send to browser clients
-        sio.sockets.emit collName, data
+        sio.sockets.in(collName).emit "packet", data
 
         # Save to database
         coll.insert data, (err, docs) ->

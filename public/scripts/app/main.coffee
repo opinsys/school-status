@@ -91,14 +91,13 @@ define [
 
     socket = io.connect()
 
-    collName = "log:#{ url.currentOrg }:wlan"
-    console.info "Listening #{ collName }"
-
-    socket.on collName, (packet) ->
+    socket.on "packet", (packet) ->
+      console.log "got packet", packet
       logRouter.handle packet
 
     socket.on "connect", ->
       loading.remove()
+      socket.emit "join", "log:#{ url.currentOrg }:wlan"
       console.info "Connected to websocket server. All ready."
 
 
