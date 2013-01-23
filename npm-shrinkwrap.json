@@ -126,16 +126,16 @@
       }
     },
     "socket.io": {
-      "version": "0.9.10",
+      "version": "0.9.13",
       "dependencies": {
         "socket.io-client": {
-          "version": "0.9.10",
+          "version": "0.9.11",
           "dependencies": {
             "uglify-js": {
               "version": "1.2.5"
             },
             "ws": {
-              "version": "0.4.21",
+              "version": "0.4.25",
               "dependencies": {
                 "commander": {
                   "version": "0.6.1"
@@ -164,13 +164,11 @@
         "policyfile": {
           "version": "0.0.4"
         },
+        "base64id": {
+          "version": "0.1.0"
+        },
         "redis": {
-          "version": "0.7.2",
-          "dependencies": {
-            "hiredis": {
-              "version": "0.1.14"
-            }
-          }
+          "version": "0.7.3"
         }
       }
     },

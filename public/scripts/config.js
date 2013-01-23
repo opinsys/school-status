@@ -10,9 +10,6 @@ require.config({
       deps: ["underscore", "jquery"],
       exports: "Backbone"
     },
-    "socket.io": {
-      exports: "io"
-    },
     "uri": {
       exports: "URI"
     },
