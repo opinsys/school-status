@@ -1,5 +1,5 @@
 
-all: npm-install wlan orgindex
+all: npm-install build
 
 npm-install:
 	npm install
