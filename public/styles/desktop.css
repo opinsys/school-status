@@ -1,3 +1,62 @@
-table {
-  border: 1px solid #000;
+@import url("/styles/vendor/animate.css");
+body {
+  font-family: "Trebuchet MS", Arial, Helvetica;
+  background-color: #f0eee1;
+}
+body a,
+body a:visited {
+  color: #5d5d5d;
+}
+body a:hover {
+  text-decoration: none;
+}
+.opinsys-logo {
+  position: absolute;
+  right: 10%;
+  top: 0em;
+  z-index: -1;
+}
+html {
+  overflow: hidden;
+}
+body {
+  background-color: transparent;
+}
+.bb-summary-view {
+  position: absolute;
+  text-align: center;
+  padding: 30px;
+  color: #777;
+  width: auto;
+  height: auto;
+  margin: 0px;
+  top: 0px;
+  left: 0px;
+  bottom: 0px;
+  right: 0px;
+}
+.bb-summary-view a {
+  text-decoration: none;
+}
+.bb-summary-view img {
+  vertical-align: middle;
+}
+.bb-summary-view h1 {
+  font-size: 14pt;
+}
+@media (min-width: 400px) {
+  body {
+    background-color: #d3d3d3;
+  }
+  .bb-summary-view {
+    background-color: #f0eee1;
+    width: 300px;
+    height: 100px;
+    top: 50%;
+    left: 50%;
+    margin-top: -80px;
+    margin-left: -180px;
+    box-shadow: 0px 0px 30px #808080;
+    border: 1px solid #000;
+  }
 }

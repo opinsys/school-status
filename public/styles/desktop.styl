@@ -1,3 +1,52 @@
 
-table
-  border 1px solid black
+@import url("/styles/vendor/animate.css")
+@import "common.styl"
+
+html
+  overflow hidden
+body
+  background-color transparent
+
+width = 300px
+height = 100px
+
+
+.bb-summary-view
+  position absolute
+
+  a
+    text-decoration none
+
+  text-align center
+  img
+    vertical-align middle
+  padding 30px
+  h1
+    font-size 14pt
+
+
+  color darken(text_color, 20)
+
+  width auto
+  height auto
+  margin 0px
+  top 0px
+  left 0px
+  bottom 0px
+  right 0px
+
+@media (min-width: 400px)
+  body
+    background-color lightgray
+  .bb-summary-view
+
+    background-color bg_color
+    width width
+    height height
+    top 50%
+    left 50%
+    margin-top - (height/2) - 30px
+    margin-left - (width/2) - 30px
+
+    box-shadow 0px 0px 30px gray
+    border 1px solid black

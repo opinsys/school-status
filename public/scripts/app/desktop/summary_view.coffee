@@ -16,7 +16,15 @@ define [
 
     constructor: ->
       super
-      @listenTo @model, "change", @render
+      @listenTo @model, "change", @animateAndRender
+      @model.once "change", @render, this
+
+    animateAndRender: ->
+      @$("p").addClass("animated tada")
+      setTimeout =>
+        @render()
+        @$("p").removeClass("animated tada")
+      , 1300
 
     render: ->
       @$el.html(template(@model.toJSON()))
