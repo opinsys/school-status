@@ -3,9 +3,6 @@ require.config({
     disableI18n: true
   },
   shim: {
-    underscore: {
-      exports: "_"
-    },
     backbone: {
       deps: ["underscore", "jquery"],
       exports: "Backbone"
@@ -16,9 +13,6 @@ require.config({
     },
     "uri": {
       exports: "URI"
-    },
-    "handlebars": {
-      exports: "Handlebars"
     }
   },
   paths: {
