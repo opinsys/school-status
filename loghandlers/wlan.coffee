@@ -13,9 +13,6 @@ module.exports = (puavo) -> (meta, data, cb) ->
   if not data.mac
     return rerr "mac is missing"
 
-  if data.wlan_event isnt "hotspot_state"
-    return rerr "'wlan_event' isn't 'hotspot_state'"
-
   if not data.hostname
     return rerr "'hostname' is missing"
 
