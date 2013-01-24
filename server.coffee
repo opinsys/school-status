@@ -55,7 +55,7 @@ app.get "/:org", (req, res) ->
 
 app.get "/schools/:org", require("./routes/schools")(db)
 
-app.get "/desktop/:organisation", (req, res) ->
+app.get "/desktop/:organisation/widget/summary", (req, res) ->
   res.render "spa_base",
     type: appLoad
     name: "desktop"
