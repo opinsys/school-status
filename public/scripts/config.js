@@ -13,6 +13,13 @@ require.config({
     },
     "uri": {
       exports: "URI"
+    },
+    "d3": {
+      exports: "d3"
+    },
+    "rickshaw": {
+      exports: "Rickshaw",
+      deps: ["d3"]
     }
   },
   paths: {
@@ -26,6 +33,8 @@ require.config({
     moment: "vendor/moment",
     uri: "vendor/URI",
     "socket.io": "vendor/socket.io",
-    "coffee-script": "vendor/coffee-script"
+    "coffee-script": "vendor/coffee-script",
+    "d3": "vendor/d3",
+    "rickshaw": "vendor/rickshaw"
   }
 });
