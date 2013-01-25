@@ -2,7 +2,7 @@ define [
   "backbone"
   "backbone.viewmaster"
 
-  "hbs!app/desktop/templates/index"
+  "hbs!app/desktop/templates/summary"
 ], (
   Backbone
   ViewMaster

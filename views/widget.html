@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+<head>
+  <title>Loading...</title>
+  <script>var require = { baseUrl: "/scripts/" };</script>
+  <script src="/scripts/require.js"></script>
+  <script src="/scripts/config.js"></script>
+  <script src="/scripts/app/desktop/<%= appLoad %>.js"></script>
+  <link rel="stylesheet" href="/styles/desktop.css" />
+</head>
+<body>
+  <a class="logo" href="http://opinsys.fi" target="_blank">
+    <img src="/img/opinsys-logo-small.png">
+  </a>
+  <div class="widget-container">
+    <div class="loading">Loading <%= name %></div>
+  </div>
+</body>
+</html>

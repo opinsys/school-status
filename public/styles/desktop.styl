@@ -4,49 +4,37 @@
 
 html
   overflow hidden
+
 body
   background-color transparent
+  text-align center
 
-width = 300px
-height = 100px
+.logo
+  display block
+  text-decoration none
+  img
+    vertical-align middle
+
+.bb-iframe-info
+  border 1px solid black
+  padding 1em
+  position absolute
+  bottom 0px
+  right 2px
+  width 350px
+  color darken(text_color, 20)
+  background-color #e7e4d0
+
+  input
+    width 100%
+  box-shadow 0px 0px 50px #e7e4d0
 
 
 .bb-summary-view
-  position absolute
-
-  a
-    text-decoration none
-
   text-align center
-  img
-    vertical-align middle
-  padding 30px
+  margin 10px
+  color darken(text_color, 20)
+
   h1
     font-size 14pt
 
-
-  color darken(text_color, 20)
-
-  width auto
-  height auto
-  margin 0px
-  top 0px
-  left 0px
-  bottom 0px
-  right 0px
-
-@media (min-width: 400px)
-  body
-    background-color lightgray
-  .bb-summary-view
-
-    background-color bg_color
-    width width
-    height height
-    top 50%
-    left 50%
-    margin-top - (height/2) - 30px
-    margin-left - (width/2) - 30px
-
-    box-shadow 0px 0px 30px gray
-    border 1px solid black
