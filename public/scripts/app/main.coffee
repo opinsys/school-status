@@ -58,7 +58,10 @@ define [
   historySize = URI(window.location.href).query(true)?.events || 2000
 
   loading.text "Loading #{ historySize } entries from history..."
-  $.get "/log/#{ url.currentOrg }/#{ url.currentSchoolId }/wlan?limit=#{ historySize }", (logArr, status, res) ->
+  $.get "/log/#{ url.currentOrg }/wlan", {
+    _limit: historySize
+    school_id: url.currentSchoolId
+  }, (logArr, status, res) ->
 
     if status isnt "success"
       console.info "failed to fetch previous log data", res

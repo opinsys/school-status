@@ -1,18 +1,24 @@
+_ = require "underscore"
 
-# GET wlan log history
-# @query {Integer} limit
+# @url {GET} /log/:organisation/:eventtype
+# @query {Integer} _limit result limit
+# @query {*} [*] Zero or more query filters
+# @return {Array} logentries
 module.exports = (db) -> (req, res) ->
 
-  org = req.params.org
-  type = req.params.type
+  organisation = req.params.organisation
+  eventtype = req.params.eventtype
   schoolId = parseInt(req.params.schoolId, 10)
-  limit = req.query.limit or 10
 
-  collName = "log:#{ org }:#{ type }"
+  limit = req.query._limit or 100
+  search = _.omit(req.query, "_limit")
+
+  collName = "log:#{ organisation }:#{ eventtype }"
   coll = db.collection collName
 
+  start = Date.now()
   # Find latest entries
-  coll.find(school_id: schoolId).sort({ relay_timestamp: -1 }).limit(limit).toArray (err, arr) ->
+  coll.find(search).sort({ relay_timestamp: -1 }).limit(limit).toArray (err, arr) ->
     if err
       console.info "Failed to fetch #{ collName }"
       return res.send err, 501
@@ -23,5 +29,5 @@ module.exports = (db) -> (req, res) ->
     for doc in arr
       delete doc._id
 
-    console.info "Fetch #{ arr.length } items from #{ collName }"
+    console.info "Fetched #{ arr.length } items from #{ collName } in #{ Date.now() - start }ms"
     res.json arr

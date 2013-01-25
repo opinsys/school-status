@@ -47,6 +47,8 @@ app.configure ->
 app.get "/", (req, res) ->
   res.send "And your organisation is?"
 
+app.get "/log/:organisation/:eventtype", require("./routes/log_history")(db)
+
 app.get "/:org/:schoolId/wlan*", (req, res) ->
   res.render "wlan", appLoad: appLoad
 
@@ -63,7 +65,6 @@ app.get "/desktop/:organisation/widget/:widget", (req, res) ->
 app.use "/api/desktop", require("./routes/desktop")(db)
 
 
-app.get "/log/:org/:schoolId/:type", require("./routes/log_history")(db)
 app.post "/log", require("./routes/log")(db, sio, puavo)
 
 puavo.on "ready", ->

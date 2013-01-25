@@ -14,7 +14,6 @@ define [
   IframeInfoView
 ) -> $ ->
 
-
   urlMatch = window.location.toString().match(/\/desktop\/(\w+)\/widget\/(\w+)/)
   if not urlMatch
     throw new Error "Bad url! #{ window.location }"
