@@ -4,6 +4,7 @@ define [
   "socket.io"
 
   "cs!app/desktop/summary_widget"
+  "cs!app/desktop/history_graph_widget"
   "cs!app/desktop/iframe_info_view"
 ], (
   $
@@ -11,6 +12,7 @@ define [
   io
 
   createSummaryWidget
+  createHistoryGraphView
   IframeInfoView
 ) -> $ ->
 
@@ -31,9 +33,12 @@ define [
     switch widgetName
       when "summary"
         createSummaryWidget(organisation, socket)
+      when "historygraph"
+        createHistoryGraphView(organisation, socket)
       else
         throw new Error "Unkown widget '#{ widgetName }'"
 
+  widget.render()
   $(".widget-container").html(widget.el)
 
   if window is window.top
