@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Mocha Tests</title>
+  <link rel="stylesheet" href="scripts/vendor/tests/mocha.css" />
+  <style type="text/css" media="all">
+    #docs {
+      font-size: small;
+    }
+  </style>
+</head>
+<body>
+  <a href="#" onclick="window.location.reload()">Restart</a>
+  <div id=docs>
+    <h1>Docs</h1>
+    <ul>
+      <li><a href="http://visionmedia.github.com/mocha/">Mocha</a></li>
+      <li><a href="http://chaijs.com/api/bdd/">Chai assertions</a></li>
+      <li><a href="http://chaijs.com/plugins/chai-jquery">Chai jQuery</a></li>
+    </ul>
+  </div>
+  <div id="mocha"></div>
+  </script>
+  <script src="scripts/vendor/tests/mocha.js"></script>
+  <script src="scripts/vendor/jquery.js"></script>
+  <script src="scripts/vendor/tests/chai.js"></script>
+
+  <script>window.require = { baseUrl: "scripts/" };</script>
+  <script src="scripts/require.js"></script>
+  <script src="scripts/config.js"></script>
+
+  <script>
+    window.expect = chai.expect;
+    mocha.setup('bdd');
+    require([
+        "cs!tests/history_graph_model_test",
+    ], function(Application) {
+    var runner = mocha
+      .globals(["jQuery*"])
+      .run();
+    });
+  </script>
+  <a href="#" onclick="window.location.reload()">Restart</a>
+  <script>document.write('<script src="http://'
+  + (location.host || 'localhost').split(':')[0]
+  + ':35729/livereload.js"></'
+  + 'script>')</script>
+</body>
+</html>
