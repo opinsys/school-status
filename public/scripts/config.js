@@ -19,7 +19,11 @@ require.config({
     },
     "rickshaw": {
       exports: "Rickshaw",
-      deps: ["d3"]
+      deps: ["d3", "jquery-ui"]
+    },
+    "jquery-ui": {
+      exports: "$.ui",
+      deps: ["jquery"]
     }
   },
   paths: {
@@ -35,6 +39,7 @@ require.config({
     "socket.io": "vendor/socket.io",
     "coffee-script": "vendor/coffee-script",
     "d3": "vendor/d3",
-    "rickshaw": "vendor/rickshaw"
+    "rickshaw": "vendor/rickshaw",
+    "jquery-ui": "vendor/jquery-ui"
   }
 });
