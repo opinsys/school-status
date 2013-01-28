@@ -5,10 +5,18 @@
 ###
 define [
   "cs!app/desktop/history_graph_view"
+  "cs!app/desktop/history_graph_model"
 ], (
   HistoryGraphView
+  HistoryGraphModel
 ) -> (organisation, socket) ->
 
-  history = new HistoryGraphView
+  window.history = new HistoryGraphModel null,
+    organisation: organisation
 
-  return history
+  widget = new HistoryGraphView
+    model: history
+
+  history.fetch()
+
+  return widget
