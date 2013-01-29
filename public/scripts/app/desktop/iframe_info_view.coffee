@@ -16,6 +16,15 @@ define [
       @url = options.url
       @$el.hide()
 
+      @_hide = (e) =>
+        if @$el.has(e.target).size() is 0 and @el isnt e.target
+          @slideDown()
+          $(window).off("click", @_hide)
+      $(window).on("click", @_hide)
+
+    slideDown: ->
+      @$el.slideUp 400
+
     elements:
       "$input": "input"
 
