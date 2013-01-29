@@ -11,7 +11,7 @@ define [
   HistoryGraphModel
 ) -> (organisation, socket) ->
 
-  window.history = new HistoryGraphModel null,
+  history = new HistoryGraphModel null,
     organisation: organisation
 
   widget = new HistoryGraphView

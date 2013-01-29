@@ -1,82 +1,74 @@
 define [
+  "underscore"
   "backbone"
   "backbone.viewmaster"
-  "rickshaw"
-
-  "hbs!app/desktop/templates/history_graph"
+  "flotr2"
 ], (
+  _
   Backbone
   ViewMaster
-  Rickshaw
-
-  template
+  Flotr
 ) ->
 
-
-
   class HistoryGraphView extends ViewMaster
+
+    className: "bb-history-graph"
 
     constructor: ->
       super
       @listenTo @model, "change sync", @render
+      $(window).on "resize", _.debounce =>
+        @render()
+      , 500
 
-    template: template
+    template: -> ""
 
     render: ->
       super
 
-      powerData = _.map @model.get("power"), (entry) ->
-        return {
-          x: entry.date
-          y: entry.count
-        }
+      @$el.width($(window).width() - 50)
+      @$el.height($(window).height() - 50)
 
+      powerData = @model.get("power")
       if powerData.length is 0
         return
 
+
+      console.log(
+        "frame",
+        new Date(_.first(powerData).date),
+        new Date(_.last(powerData).date)
+      )
+
+      powerData = _.map powerData, (entry) ->
+        [entry.date, entry.count]
+
       loginData = _.map @model.get("login"), (entry) ->
-        return {
-          x: entry.date
-          y: entry.count
-        }
+        [entry.date, entry.count]
 
-      graph = new Rickshaw.Graph( {
-        element: document.getElementById("chart"),
-        width: 960,
-        height: 500,
-        renderer: 'line',
-        series: [
-          {
-            color: "#c05020",
-            data: powerData,
-            name: 'Powered on devices'
-          },
-          {
-            color: "#ff560c",
-            data: loginData,
-            name: 'Devices in use'
+      graph = Flotr.draw(@el, [
+        {
+          data: powerData
+          color: "#ff9e00"
+          lines: {
+            fill: true
           }
-        ]
+        },
+        {
+          data: loginData
+          color: "#804f00"
+          lines: {
+            fill: true
+          }
+        }
+      ], {
+        xaxis: {
+          title: "Time"
+          mode: "time"
+        }
+        yaxis: {
+          title: "Machines"
+          tickDecimals: 0
+        }
       })
 
-      graph.render()
-
-      hoverDetail = new Rickshaw.Graph.HoverDetail( {
-        graph: graph
-      })
-
-      legend = new Rickshaw.Graph.Legend( {
-        graph: graph,
-        element: document.getElementById('legend')
-
-      })
-
-      shelving = new Rickshaw.Graph.Behavior.Series.Toggle( {
-        graph: graph,
-        legend: legend
-      })
-
-      axes = new Rickshaw.Graph.Axis.Time( {
-        graph: graph
-      })
-      axes.render()
