@@ -30,6 +30,7 @@ define [
       super
       @url = "/log/#{ options.organisation }/desktop"
       @seen = {}
+      @rawData = []
 
       ###*
       # Events to ignore before a 'bootend' event
@@ -39,7 +40,10 @@ define [
         logout: true
       }
 
+    getMachineNames: -> _.uniq _.map @rawData, (e) -> e.hostname
+
     parse: (data) ->
+      @rawData = @rawData.concat(data)
 
       # Ensure numeric date timestamps
       _.each data, (entry) =>
@@ -53,7 +57,6 @@ define [
           @pushToSeries(seriesName, entry, silent: true) if seriesName
 
       return {}
-
 
     pushToSeries: (seriesName, entry, options) ->
       series = @get(seriesName)
