@@ -33,13 +33,6 @@ define [
       if powerData.length is 0
         return
 
-
-      console.log(
-        "frame",
-        new Date(_.first(powerData).date),
-        new Date(_.last(powerData).date)
-      )
-
       powerData = _.map powerData, (entry) ->
         [entry.date, entry.count]
 
