@@ -52,6 +52,9 @@ module.exports = (db, sio, puavo) ->
     console.log "http got packet", data
     fullOrg = data.relay_puavo_domain
 
+    if data.date
+      data.date = parseInt(data.date, 10)
+
     # All characters before the first dot
     if match = data.relay_puavo_domain.match(/^([^\.]+)/)
       org = match[1]
