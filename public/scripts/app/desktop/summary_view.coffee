@@ -13,11 +13,11 @@ define [
   class SummaryView extends ViewMaster
 
     className: "bb-summary-view"
+    template: template
 
     constructor: ->
       super
-      @listenTo @model, "change", @animateAndRender
-      @model.once "change", @render, this
+      @listenTo @model, "change sync", @animateAndRender
 
     animateAndRender: ->
       @$("p").addClass("animated tada")
@@ -26,6 +26,7 @@ define [
         @$("p").removeClass("animated tada")
       , 1300
 
-    render: ->
-      @$el.html(template(@model.toJSON()))
-
+    context: -> {
+      poweredOnCount: _.last(@model.get("power"))?.count or 0
+      loggedInCount: _.last(@model.get("login"))?.count or 0
+    }

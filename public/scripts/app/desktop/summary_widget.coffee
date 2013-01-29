@@ -4,18 +4,21 @@
 #   @param {Socket} socket Socket.IO socket object
 ###
 define [
-  "cs!app/desktop/desktop_model"
+  "cs!app/desktop/history_graph_model"
   "cs!app/desktop/summary_view"
 ], (
-  DesktopModel
+  HistoryGraphModel
   SummaryView
 ) -> (organisation, socket) ->
 
-  sm = new DesktopModel null, organisation: organisation
-  summary = new SummaryView model: sm
-  sm.fetch()
+  history = new HistoryGraphModel null,
+    organisation: organisation
+
+  summary = new SummaryView model: history
+
+  history.fetch()
 
   socket.on "packet", (packet) ->
-    sm.fetch()
+    history.fetch()
 
   return summary
