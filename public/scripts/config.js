@@ -21,6 +21,13 @@ require.config({
       exports: "Rickshaw",
       deps: ["d3", "jquery-ui"]
     },
+    "bean": {
+      exports: "bean",
+    },
+    "flotr2": {
+      exports: "Flotr",
+      deps: ["underscore", "bean"]
+    },
     "jquery-ui": {
       exports: "$.ui",
       deps: ["jquery"]
@@ -40,6 +47,8 @@ require.config({
     "coffee-script": "vendor/coffee-script",
     "d3": "vendor/d3",
     "rickshaw": "vendor/rickshaw",
-    "jquery-ui": "vendor/jquery-ui"
+    "jquery-ui": "vendor/jquery-ui",
+    "flotr2": "vendor/flotr2",
+    "bean": "vendor/bean"
   }
 });
