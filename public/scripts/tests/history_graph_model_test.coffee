@@ -80,4 +80,61 @@ define [
         count: 1
       })
 
+    it "duplicate 'bootend' does not duplicate powered on devices count", ->
+        date = Date.now()
+        model.parse([
+          {
+            date: date
+            hostname: "foo"
+            event: "bootend"
+          },
+          {
+            date: date + 1000*5
+            hostname: "foo"
+            event: "bootend"
+          }
+        ])
+
+        expect(_.last(model.get("power"))).to.deep.eq({
+          date: date + 1000*5
+          count: 1
+        })
+
+
+    it "duplicate 'login' does not duplicate logged in devices count", ->
+        date = Date.now()
+        model.parse([
+          {
+            date: date
+            hostname: "foo"
+            event: "login"
+          },
+          {
+            date: date + 1000*5
+            hostname: "foo"
+            event: "login"
+          }
+        ])
+
+        expect(_.last(model.get("login"))).to.deep.eq({
+          date: date + 1000*5
+          count: 1
+        })
+
+    it "double shutdown is ignored", ->
+        model.parse [
+          "bootend"
+          "shutdown"
+          "shutdown"
+        ].map (event) -> {
+          hostname: "foo"
+          event: event
+        }
+
+        expect(
+          _.last(model.get("power")).count
+        ).to.eq 0
+
+
+
 

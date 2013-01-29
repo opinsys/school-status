@@ -66,17 +66,33 @@ define [
       if @startIgnore[entry.event] and not @seen[entry.hostname]
         return
 
-      @seen[entry.hostname] = true
+      state = @seen[entry.hostname] ?= {
+        bootend: false
+        login: false
+      }
+
+      if entry.event is "shutdown" and not state.bootend
+        return
 
       if last = _.last(series)
         next = _.clone(last)
         next.date = entry.date
-        next.count += op[entry.event]
+        if not state[entry.event]
+          next.count += op[entry.event]
       else
         next = {
           count: 1
           date: entry.date
         }
+
+      if entry.event in ["bootend", "login", "logout"]
+        state.bootend = true
+      if entry.event is "shutdown"
+        state.bootend = false
+      if entry.event is "login"
+        state.login = true
+      if entry.event is "logout"
+        state.login = false
 
       series.push(next)
       @set(seriesName, series, options)
