@@ -14,23 +14,12 @@ require.config({
     "uri": {
       exports: "URI"
     },
-    "d3": {
-      exports: "d3"
-    },
-    "rickshaw": {
-      exports: "Rickshaw",
-      deps: ["d3", "jquery-ui"]
-    },
     "bean": {
       exports: "bean",
     },
     "flotr2": {
       exports: "Flotr",
       deps: ["underscore", "bean"]
-    },
-    "jquery-ui": {
-      exports: "$.ui",
-      deps: ["jquery"]
     }
   },
   paths: {
@@ -45,9 +34,6 @@ require.config({
     uri: "vendor/URI",
     "socket.io": "vendor/socket.io",
     "coffee-script": "vendor/coffee-script",
-    "d3": "vendor/d3",
-    "rickshaw": "vendor/rickshaw",
-    "jquery-ui": "vendor/jquery-ui",
     "flotr2": "vendor/flotr2",
     "bean": "vendor/bean"
   }
