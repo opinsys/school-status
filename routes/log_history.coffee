@@ -10,7 +10,7 @@ module.exports = (db) -> (req, res) ->
   eventtype = req.params.eventtype
   schoolId = parseInt(req.params.schoolId, 10)
 
-  limit = req.query._limit or 100
+  limit = req.query._limit or 1000
   search = _.omit(req.query, "_limit")
 
   collName = "log:#{ organisation }:#{ eventtype }"
