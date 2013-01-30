@@ -121,6 +121,63 @@ define [
           count: 1
         })
 
+
+    it "shutdown should generate logout if logged in", ->
+        date = Date.now()
+        model.parse([
+          {
+            date: date
+            hostname: "foo"
+            event: "bootend"
+          },
+          {
+            date: date + 1000*5
+            hostname: "foo"
+            event: "login"
+          }
+          {
+            date: date + 1000*10
+            hostname: "foo"
+            event: "shutdown"
+          }
+        ])
+
+        expect(_.last(model.get("login"))).to.deep.eq({
+          date: date + 1000*10
+          count: 0
+        })
+
+    it "shutdown should not generate logout if not logged in", ->
+        date = Date.now()
+        model.parse([
+          {
+            date: date
+            hostname: "bar"
+            event: "bootend"
+          },
+          {
+            date: date + 1000*5
+            hostname: "bar"
+            event: "login"
+          },
+          {
+            date: date
+            hostname: "foo"
+            event: "bootend"
+          },
+          {
+            date: date + 1000*10
+            hostname: "foo"
+            event: "shutdown"
+          }
+        ])
+
+        expect(_.last(model.get("login"))).to.deep.eq({
+          date: date + 1000*5
+          count: 1
+        })
+
+
     it "double shutdown is ignored", ->
         model.parse [
           "bootend"

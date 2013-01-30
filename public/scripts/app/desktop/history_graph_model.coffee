@@ -66,6 +66,11 @@ define [
           event: "bootend"
         }))
 
+      if entry.event is "shutdown" and @seen[entry.hostname]?.login
+        @pushToSeries("login", _.extend({}, entry, {
+          event: "logout"
+        }))
+
       if @startIgnore[entry.event] and not @seen[entry.hostname]
         return
 
