@@ -52,7 +52,9 @@ define [
       # Sort by date
       data.sort (a, b) -> a.date - b.date
 
+
       _.each data, (entry) =>
+        console.log entry.event, entry.hostname, new Date(entry.date)
         _.each seriesMap[entry.event], (seriesName) =>
           @pushToSeries(seriesName, entry, silent: true) if seriesName
 

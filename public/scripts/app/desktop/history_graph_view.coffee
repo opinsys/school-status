@@ -56,9 +56,6 @@ define [
           _.last(powerData)[1] # duplicate last value
         ])
 
-      loginData.forEach (entry) ->
-        console.log entry[1], new Date(entry[0])
-
       graph = Flotr.draw(@el, [
         {
           data: powerData
