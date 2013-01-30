@@ -42,6 +42,12 @@ define [
       # Put zero as the first entry. Makes the graph prettier
       loginData.unshift([loginData[0].date, 0])
 
+      # Ensure that login graph is drawn to the end
+      loginData.push([
+        _.last(powerData)[0] # Use date from power data
+        _.last(loginData)[1] # Use previus value from login data
+      ])
+
       graph = Flotr.draw(@el, [
         {
           data: powerData
