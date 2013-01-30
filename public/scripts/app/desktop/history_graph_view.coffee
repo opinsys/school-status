@@ -39,6 +39,9 @@ define [
       loginData = _.map @model.get("login"), (entry) ->
         [entry.date, entry.count]
 
+      # Put zero as the first entry. Makes the graph prettier
+      loginData.unshift([loginData[0].date, 0])
+
       graph = Flotr.draw(@el, [
         {
           data: powerData
