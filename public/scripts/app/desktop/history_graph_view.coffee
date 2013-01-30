@@ -42,11 +42,22 @@ define [
       # Put zero as the first entry. Makes the graph prettier
       loginData.unshift([loginData[0][0], 0])
 
-      # Ensure that login graph is drawn to the end
-      loginData.push([
-        _.last(powerData)[0] # Use date from power data
-        _.last(loginData)[1] # Use previus value from login data
-      ])
+      # Make sure that last values on both lines are on the same date. Just
+      # duplicate the last value from each line. Otherwise we'll see some
+      # glitches in graphs
+      if _.last(loginData)[0] < _.last(powerData)[0]
+        loginData.push([
+          _.last(powerData)[0] # Use date from power data
+          _.last(loginData)[1] # duplicate last value
+        ])
+      if _.last(loginData)[0] > _.last(powerData)[0]
+        powerData.push([
+          _.last(loginData)[0] # use date from login data
+          _.last(powerData)[1] # duplicate last value
+        ])
+
+      loginData.forEach (entry) ->
+        console.log entry[1], new Date(entry[0])
 
       graph = Flotr.draw(@el, [
         {
