@@ -29,7 +29,7 @@ define [
       @$el.width($(window).width() - 50)
       @$el.height($(window).height() - 50)
 
-      powerData = @model.get("power")
+      powerData = _.uniq @model.get("power")
       if powerData.length is 0
         return
 
