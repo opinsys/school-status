@@ -40,7 +40,7 @@ define [
         [entry.date, entry.count]
 
       # Put zero as the first entry. Makes the graph prettier
-      loginData.unshift([loginData[0].date, 0])
+      loginData.unshift([loginData[0][0], 0])
 
       # Ensure that login graph is drawn to the end
       loginData.push([
