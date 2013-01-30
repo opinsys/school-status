@@ -45,6 +45,7 @@ define [
           color: "#ff9e00"
           lines: {
             fill: true
+            steps: true
           }
         },
         {
@@ -52,6 +53,7 @@ define [
           color: "#804f00"
           lines: {
             fill: true
+            steps: true
           }
         }
       ], {
