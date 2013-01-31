@@ -93,12 +93,12 @@ define [
       flotrOptions = {
         HtmlText: false
         xaxis: {
-          title: "Time"
+          title: "Aika"
           mode: "time"
           timeMode: "local"
         },
         yaxis: {
-          title: "Machines"
+          title: "Laitteet"
           tickDecimals: 0
         },
         mouse : {
@@ -109,7 +109,8 @@ define [
           sensibility: 10
           trackDecimals: 0
           trackFormatter: (o) ->
-            "#{ parseInt(o.y) } machines on #{ new Date(Number(o.x)) }"
+            date = new Date(Number(o.x))
+            return "Laitemäärä: #{ parseInt(o.y) }, klo. #{ date.getHours() }:#{ date.getMinutes() }"
         }
       }
 
