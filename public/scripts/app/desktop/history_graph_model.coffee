@@ -42,6 +42,13 @@ define [
 
     getMachineNames: -> _.uniq _.map @rawData, (e) -> e.hostname
 
+    fetch: ->
+      @set("power", [], silent: true)
+      @set("login", [], silent: true)
+      @rawData = []
+      @seen = {}
+      super
+
     parse: (data) ->
       @rawData = @rawData.concat(data)
 
