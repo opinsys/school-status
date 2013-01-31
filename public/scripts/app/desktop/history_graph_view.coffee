@@ -3,16 +3,23 @@ define [
   "backbone"
   "backbone.viewmaster"
   "flotr2"
+
+  "hbs!app/desktop/templates/history_graph"
 ], (
   _
   Backbone
   ViewMaster
   Flotr
+
+  template
 ) ->
 
   class HistoryGraphView extends ViewMaster
 
     className: "bb-history-graph"
+
+    powerColor: "#ff9e00"
+    loginColor: "#804f00"
 
     constructor: ->
       super
@@ -21,13 +28,21 @@ define [
         @render()
       , 500
 
-    template: -> ""
+    template: template
+
+    elements: {
+      "$plot": ".plot"
+      "$power": ".power"
+      "$login": ".login"
+    }
 
     render: ->
       super
+      @$power.css("color", @powerColor)
+      @$login.css("color", @loginColor)
 
-      @$el.width($(window).width() - 50)
-      @$el.height($(window).height() - 50)
+      @$(".plot").width($(window).width() - 50)
+      @$(".plot").height($(window).height() - 100)
 
       powerData = _.uniq @model.get("power")
       if powerData.length is 0
@@ -56,10 +71,10 @@ define [
           _.last(powerData)[1] # duplicate last value
         ])
 
-      graph = Flotr.draw(@el, [
+      flotrData = [
         {
           data: powerData
-          color: "#ff9e00"
+          color: @powerColor
           lines: {
             fill: true
             steps: true
@@ -67,20 +82,24 @@ define [
         },
         {
           data: loginData
-          color: "#804f00"
+          color: @loginColor
           lines: {
             fill: true
             steps: true
           }
         }
-      ], {
+      ]
+
+      flotrOptions = {
+        HtmlText: false
         xaxis: {
           title: "Time"
           mode: "time"
-        }
+        },
         yaxis: {
           title: "Machines"
           tickDecimals: 0
         }
-      })
+      }
 
+      graph = Flotr.draw(@$plot.get(0), flotrData, flotrOptions)
