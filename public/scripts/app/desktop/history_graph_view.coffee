@@ -95,6 +95,7 @@ define [
         xaxis: {
           title: "Time"
           mode: "time"
+          timeMode: "local"
         },
         yaxis: {
           title: "Machines"
