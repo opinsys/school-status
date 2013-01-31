@@ -28,7 +28,19 @@ define [
 
     constructor: (attrs, options) ->
       super
-      @url = "/log/#{ options.organisation }/desktop"
+
+      query = _.extend({
+        projection: [
+          "type"
+          "event"
+          "hostname"
+          "date"
+        ]
+      }, options.query)
+
+      @url = "/log/#{ options.organisation }/desktop?#{ $.param(query) }"
+      console.log "Model query from #{ @url }"
+
       @seen = {}
       @rawData = []
 
@@ -39,6 +51,7 @@ define [
         shutdown: true
         logout: true
       }
+
 
     getMachineNames: -> _.uniq _.map @rawData, (e) -> e.hostname
 
