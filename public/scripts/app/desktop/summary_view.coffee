@@ -20,10 +20,10 @@ define [
       @listenTo @model, "change sync", @animateAndRender
 
     animateAndRender: ->
-      @$("p").addClass("animated tada")
+      @$("div").addClass("animated tada")
       setTimeout =>
         @render()
-        @$("p").removeClass("animated tada")
+        @$("div").removeClass("animated tada")
       , 1300
 
     context: -> {

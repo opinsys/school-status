@@ -62,3 +62,14 @@ body {
 .bb-summary-view h1 {
   font-size: 14pt;
 }
+.bb-summary-view div {
+  padding-bottom: 5px;
+}
+.bb-summary-view span {
+  font-size: 40px;
+  vertical-align: middle;
+  margin-right: 30px;
+}
+.bb-summary-view img {
+  vertical-align: middle;
+}
