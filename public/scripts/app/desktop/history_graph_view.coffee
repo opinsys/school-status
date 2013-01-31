@@ -99,6 +99,16 @@ define [
         yaxis: {
           title: "Machines"
           tickDecimals: 0
+        },
+        mouse : {
+          track: true
+          lineColor: "black"
+          relative: false
+          position: "nw"
+          sensibility: 10
+          trackDecimals: 0
+          trackFormatter: (o) ->
+            "#{ parseInt(o.y) } machines on #{ new Date(Number(o.x)) }"
         }
       }
 
