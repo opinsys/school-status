@@ -57,7 +57,7 @@ app.get "/:org", (req, res) ->
 
 app.get "/schools/:org", require("./routes/schools")(db)
 
-app.get "/desktop/:organisation/widget/:widget", (req, res) ->
+app.get "/:organisation/desktop/widget/:widget", (req, res) ->
   res.render "widget",
     appLoad: appLoad
     name: req.params.widget
