@@ -36,7 +36,9 @@ define [
       when "historygraph"
         createHistoryGraphView(organisation, socket)
       else
-        throw new Error "Unkown widget '#{ widgetName }'"
+        msg = "Unkown widget '#{ widgetName }'"
+        $("body").html(msg)
+        throw new Error(msg)
 
   widget.render()
   $(".widget-container").html(widget.el)
