@@ -72,5 +72,8 @@ module.exports = (db) -> (req, res) ->
       # Send latest event as last
       arr.reverse()
 
+      for doc in arr
+        delete doc._id
+
       console.info "Fetched #{ arr.length } items from #{ collName } in #{ Date.now() - start }ms"
       res.json arr
