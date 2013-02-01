@@ -59,8 +59,10 @@ define [
 
   loading.text "Loading #{ historySize } entries from history..."
   $.get "/log/#{ url.currentOrg }/wlan", {
-    _limit: historySize
-    school_id: url.currentSchoolId
+    limit: historySize
+    match: {
+      school_id: url.currentSchoolId
+    }
   }, (logArr, status, res) ->
 
     if status isnt "success"
