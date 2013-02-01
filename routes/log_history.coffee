@@ -43,7 +43,8 @@ module.exports = (db) -> (req, res) ->
         return res.json 501, error:
           msg: "queries with $ are not implemented"
 
-      console.log k, v
+      if v.match(/^[0-9]+$/)
+        v = parseInt(v, 10)
       query[k] = v
 
   if req.query.after
@@ -58,6 +59,7 @@ module.exports = (db) -> (req, res) ->
   coll = db.collection collName
 
   start = Date.now()
+  console.log "GET wth", query, limit
   coll
     .find(query, projection)
     .sort({ relay_timestamp: -1 })
