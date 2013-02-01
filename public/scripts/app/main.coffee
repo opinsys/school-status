@@ -56,14 +56,18 @@ define [
     school: schoolModel
 
   historySize = URI(window.location.href).query(true)?.events || 2000
-
-  loading.text "Loading #{ historySize } entries from history..."
-  $.get "/log/#{ url.currentOrg }/wlan", {
+  query = {
     limit: historySize
     match: {
       school_id: url.currentSchoolId
     }
-  }, (logArr, status, res) ->
+  }
+
+  loading.text "Loading #{ historySize } entries from history..."
+  logUrl = "/log/#{ url.currentOrg }/wlan?#{ $.param(query) }"
+  console.log "GET #{ logUrl }"
+
+  $.get logUrl, (logArr, status, res) ->
 
     if status isnt "success"
       console.info "failed to fetch previous log data", res
