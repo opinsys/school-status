@@ -18,6 +18,7 @@ body a:hover {
 }
 html {
   overflow: hidden;
+  background: #fff;
 }
 body {
   background-color: transparent;
@@ -31,7 +32,6 @@ body {
 }
 .bb-history-graph {
   margin-top: 10px;
-  background: #fff;
 }
 .bb-history-graph .legend span {
   padding: 0px;
@@ -59,7 +59,6 @@ body {
   text-align: center;
   margin: 10px;
   color: #777;
-  background: #fff;
 }
 .bb-summary-view h1 {
   font-size: 14pt;
