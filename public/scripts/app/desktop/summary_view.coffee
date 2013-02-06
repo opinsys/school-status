@@ -29,4 +29,5 @@ define [
     context: -> {
       poweredOnCount: _.last(@model.get("power"))?.count or 0
       loggedInCount: _.last(@model.get("login"))?.count or 0
+      freeCount: @model.getFreeCount() or 0
     }

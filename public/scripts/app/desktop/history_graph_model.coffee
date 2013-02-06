@@ -127,3 +127,6 @@ define [
       series.push(next)
       @set(seriesName, series, options)
 
+    getFreeCount: ->
+     _.last( @get("power") )?.count - _.last( @get("login") )?.count
+
