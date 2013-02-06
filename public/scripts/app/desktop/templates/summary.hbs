@@ -1,18 +1,21 @@
 
 <h1>Laitteiden tila</h1>
 
-<p>
-  <div class="loggedIn">
-    <span title="Käytössä olevien laitteiden määrä">
-      <span>{{loggedInCount}}</span> <img src="/img/logged-in-computer.png" />
-    </span>
-  </div>
-  <div class="poweredOn">
-    <span title="Käynnissä olevien laitteiden määrä">
-      <span>{{poweredOnCount}}</span> <img src="/img/power-on-computer.png" />
-    </span>
-  </div>
-</p>
+<table>
 
-<p>
-</p>
+<tr title="Käytössä olevien laitteiden määrä">
+<td><img src="/img/logged-in-computer.png" class="title" /></td>
+<td>{{loggedInCount}}</td>
+</tr>
+
+<tr title="Vapaana olevien laitteiden määrä">
+<td><img src="/img/free-computer.png" class="title" /></td>
+<td>{{freeCount}}</td>
+</tr>
+
+<tr title="Laitteita yhteensä">
+<td>Yht.</td>
+<td>{{poweredOnCount}}</td>
+</tr>
+
+</table>

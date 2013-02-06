@@ -60,17 +60,14 @@ body {
   margin: 10px;
   color: #777;
 }
+.bb-summary-view table {
+  margin-left: auto;
+  margin-right: auto;
+}
+.bb-summary-view table td {
+  font-size: 40px;
+  padding: 0px 15px 0px 15px;
+}
 .bb-summary-view h1 {
   font-size: 14pt;
-}
-.bb-summary-view div {
-  padding-bottom: 5px;
-}
-.bb-summary-view span {
-  font-size: 40px;
-  vertical-align: middle;
-  margin-right: 30px;
-}
-.bb-summary-view img {
-  vertical-align: middle;
 }
