@@ -44,7 +44,5 @@ define [
   $(".widget-container").html(widget.el)
 
   if window is window.top
-    info = new IframeInfoView url: window.location.toString()
-    info.render()
     $("body").append(info.el)
     info.slideUp()
