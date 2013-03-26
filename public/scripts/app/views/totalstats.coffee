@@ -26,19 +26,20 @@ define [
 
       lastJoin = @clients.max (m) ->
         if not m.isConnected()
-          return "0"
-        m.get("relay_timestamp")
+          return 0
+        m.getTimestampAsMs()
 
       return if not lastJoin
 
-      lastJoinSec = (Date.now() / 1000)  - parseInt(lastJoin.get("relay_timestamp"), 10)
-      lastJoinSec = Math.round lastJoinSec
+      lastJoinSec = Math.round(
+        (Date.now()  - lastJoin.getTimestampAsMs()) / 1000
+      )
 
       if 0 > lastJoinSec
         lastJoinSec = 0
 
       if lastJoinSec > 60
-        msg = moment.unix(lastJoin.get("relay_timestamp")).fromNow()
+        msg = lastJoin.getTimestampAsMoment().fromNow()
       else
         msg = lastJoinSec + " seconds ago"
 

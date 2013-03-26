@@ -27,13 +27,13 @@ define [
 
 
     formatClient: (m) ->
-      time = moment.unix(m.get "relay_timestamp")
+      time = m.getTimestampAsMoment()
       mac: m.get "mac"
       ago: time.fromNow()
       time: time.format "YYYY-MM-DD HH:mm:ss"
       manufacturer: m.get "client_manufacturer"
       clientHostname: m.get "client_hostname"
-      timestamp: parseInt(m.get "relay_timestamp")
+      timestamp: parseInt(m.getTimestampAsMs()
 
     _shortFormated: (a, b) ->
       b.timestamp - a.timestamp
