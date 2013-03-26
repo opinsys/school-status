@@ -8,6 +8,11 @@ define [
   $
   moment
   _) ->
+
+  isTooOldToBeConnected = (model) ->
+    hour = 1000 * 60 * 60
+    return Date.now() - model.getTimestampAsMs() > hour
+
   class WlanHostDetails extends View
 
     className: "bb-wlan-host-details"
@@ -33,7 +38,7 @@ define [
       time: time.format "YYYY-MM-DD HH:mm:ss"
       manufacturer: m.get "client_manufacturer"
       clientHostname: m.get "client_hostname"
-      timestamp: parseInt(m.getTimestampAsMs()
+      timestamp: m.getTimestampAsMs()
 
     _shortFormated: (a, b) ->
       b.timestamp - a.timestamp
@@ -43,7 +48,7 @@ define [
       seen = []
 
       @model.clients.each (m) =>
-        if m.get("hostname") is @model.id
+        if m.get("hostname") is @model.id and not isTooOldToBeConnected(m)
           connected.push @formatClient m
         else
           seen.push @formatClient m
