@@ -57,10 +57,10 @@ define [
 
     viewJSON: ->
 
-      # FIXME: will fail with zero events
-      firstEntry = @clients.min (m) -> m.get("relay_timestamp")
-      if firstEntry
-        time = moment.unix(firstEntry.get("relay_timestamp"))
+      firstEntry = @clients.min (m) -> m.getTimestampAsMs()
+
+      if firstEntry and firstEntry isnt Infinity
+        time = firstEntry.getTimestampAsMoment()
       else
         time = moment()
 
